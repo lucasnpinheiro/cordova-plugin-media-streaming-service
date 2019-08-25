@@ -20,7 +20,7 @@
     <asset src="www/mediastreaming.js" target="js/mediastreaming.js"/>
 
     <js-module src="www/mediastreaming.js" name="MediaStreamingService">
-        <clobbers target="cordova.plugins.mediaStreamingService" />
+        <clobbers target="cordova.plugins.MediaStreamingService" />
     </js-module>
 
     <platform name="android">

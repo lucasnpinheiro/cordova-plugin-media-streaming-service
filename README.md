@@ -1,98 +1,204 @@
-# cordova-plugin-media-streaming-service [![npm version](https://badge.fury.io/js/cordova-plugin-media-streaming-service.svg)](https://badge.fury.io/js/cordova-plugin-media-streaming-service)
+<!--
+*** Thanks for checking out this README Template. If you have a suggestion that would
+*** make this better, please fork the repo and create a pull request or simply open
+*** an issue with the tag "enhancement".
+*** Thanks again! Now go create something AMAZING! :D
+-->
 
-***NOTE***: This plugin does not on its own allow the user to execute javascript while the app is in the background. This must be accompanied by another plugin that will create a background process that will give the application background cycles. This plugin mainly exists to solve the problem outlined [here](https://developer.android.com/about/versions/oreo/background#services). An app will have restricted background processing if it is not considered a "foreground app" for android API 26+ and will prevent background pluggins from functioning properly. With this plugin your application will be a foreground app and let your background services run properly. This plugin may also help with [android doze](https://developer.android.com/training/monitoring-device-state/doze-standby#understand_app_standby) where an application may not run in the background unless it also has a foreground process. Do not expect this plugin on its own to allow your app to execute javascript while in the background.
 
----
 
-This plugin allows for android devices to continue running services in the background, using a foreground ongoing notification. This is targeted towards use with plugins such as 'cordova-geolocation' that will not run while the app is in the background on android API 26+.
 
----
 
-## Requirements
+<!-- PROJECT SHIELDS -->
+<!--
+*** I'm using markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+*** See the bottom of this document for the declaration of the reference variables
+*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
-- cordova version >= 8.0.0
-- cordova-android version >= 7.0.0
-- android-sdk api >= 26
 
----
 
-## Setup and Usage
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  </a>
 
-### Install
+  <h3 align="center">Best-README-Template</h3>
 
-```shell
-cordova plugin add cordova-plugin-media-streaming-service
+  <p align="center">
+    An awesome README template to jumpstart your projects!
+    <br />
+    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    ·
+    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
+  </p>
+</p>
 
-#or
 
-cordova plugin add https://github.com/paulkjoseph/cordova-plugin-media-streaming-service
+
+<!-- TABLE OF CONTENTS -->
+## Table of Contents
+
+* [About the Project](#about-the-project)
+  * [Built With](#built-with)
+* [Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Installation](#installation)
+* [Usage](#usage)
+* [Roadmap](#roadmap)
+* [Contributing](#contributing)
+* [License](#license)
+* [Contact](#contact)
+* [Acknowledgements](#acknowledgements)
+
+
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+[![Product Name Screen Shot][product-screenshot]](https://example.com)
+
+There are many great README templates available on GitHub, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need.
+
+Here's why:
+* Your time should be focused on creating something amazing. A project that solves a problem and helps others
+* You shouldn't be doing the same tasks over and over like creating a README from scratch
+* You should element DRY principles to the rest of your life :smile:
+
+Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue.
+
+A list of commonly used resources that I find helpful are listed in the acknowledgements.
+
+### Built With
+This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+* [Bootstrap](https://getbootstrap.com)
+* [JQuery](https://jquery.com)
+* [Laravel](https://laravel.com)
+
+
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+This is an example of how you may give instructions on setting up your project locally.
+To get a local copy up and running follow these simple example steps.
+
+### Prerequisites
+
+This is an example of how to list things you need to use the software and how to install them.
+* npm
+```sh
+npm install npm@latest -g
 ```
 
-### Start Method
+### Installation
 
-To enable the foreground service, call the `start` method:
-
-```javascript
-cordova.plugins.mediaStreamingService.start('Notification Title', 'Notification Text', 'drawable-icon-name', [notification importance], [notification id]);
-
-// High priority with notification id 10
-// ('myicon.png' is in the 'res/drawable' folder)
-cordova.plugins.mediaStreamingService.start('GPS Running', 'Background Service', 'myicon', 3, 10);
-
-// Notification id is optional
-cordova.plugins.mediaStreamingService.start('GPS Running', 'Background Service', 'myicon', 3);
-
-// Notification importance is optional, the default is 1 - Low (no sound or vibration)
-cordova.plugins.mediaStreamingService.start('GPS Running', 'Background Service', 'myicon');
-
-// Icon is optional, but will use a 'star' icon as the default
-cordova.plugins.mediaStreamingService.start('GPS Running', 'Background Service');
+1. Get a free API Key at [https://example.com](https://example.com)
+2. Clone the repo
+```sh
+git clone https:://github.com/your_username_/Project-Name.git
+```
+3. Install NPM packages
+```sh
+npm install
+```
+4. Enter your API in `config.js`
+```JS
+const API_KEY = 'ENTER YOUR API';
 ```
 
-### Stop Method
 
-To disable the foreground service, call the `stop` method:
 
-```javascript
-cordova.plugins.mediaStreamingService.stop();
-```
+<!-- USAGE EXAMPLES -->
+## Usage
 
----
+Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-## Parameters
+_For more examples, please refer to the [Documentation](https://example.com)_
 
-### **Icon**
 
-The drawable icon can be any drawable image that exists in the resource folder. This means you must copy the icon you want to use into the `platforms/android/app/src/main/res/drawable` folder set. If no icon can be found using the icon name parameter, a default star icon will be used.
 
-**NOTE:** The normal android drawable (`R.drawable`) icons are not available for use as icons. You cannot reference these icons through the `start` icon parameter. Include your icon manually in the folders mentioned above.
+<!-- ROADMAP -->
+## Roadmap
 
-### **Notification ID**
+See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
 
-The notification id is a customizable integer that is used to reference the notification that will be launched. This is customizable to avoid conflicting with any other notifications. If this is not included, a default id will be used.
 
-### **Notification Importance**
 
-Notification importance dictates how the notification is initially presented:
+<!-- CONTRIBUTING -->
+## Contributing
 
-Value | Importance | Description
---- | --- | ---
-1|IMPORTANCE_LOW|Does not make a sound or heads-up display. (Default)
-2|IMPORTANCE_DEFAULT|Makes a sound, but no heads-up display.
-3|IMPORTANCE_HIGH|Makes a sound and heads-up display.
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
----
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## Questions?
 
-Please feel free to open an issue or make a pull request!
 
----
-
+<!-- LICENSE -->
 ## License
 
-MIT - Please see the LICENSE file for details.
+Distributed under the MIT License. See `LICENSE` for more information.
 
----
 
-Paul Kibe Njuguna (2018)
+
+<!-- CONTACT -->
+## Contact
+
+Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+
+Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+
+
+
+<!-- ACKNOWLEDGEMENTS -->
+## Acknowledgements
+* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
+* [Img Shields](https://shields.io)
+* [Choose an Open Source License](https://choosealicense.com)
+* [GitHub Pages](https://pages.github.com)
+* [Animate.css](https://daneden.github.io/animate.css)
+* [Loaders.css](https://connoratherton.com/loaders)
+* [Slick Carousel](https://kenwheeler.github.io/slick)
+* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
+* [Sticky Kit](http://leafo.net/sticky-kit)
+* [JVectorMap](http://jvectormap.com)
+* [Font Awesome](https://fontawesome.com)
+
+
+
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=flat-square
+[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=flat-square
+[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
+[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=flat-square
+[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
+[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=flat-square
+[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
+[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=flat-square
+[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/othneildrew
+[product-screenshot]: images/screenshot.png
