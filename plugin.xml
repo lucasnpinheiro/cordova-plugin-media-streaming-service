@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        id="cordova-plugin-media-streaming-service"
+        version="1.0.0">
+
+    <name>Cordova Media Streaming Service</name>
+    <description>Media streaming service with ongoing notification.</description>
+    <license>MIT</license>
+    <author>Paul Kibe Njuguna</author>
+    <repo>https://github.com/paulkjoseph/cordova-plugin-media-streaming-service</repo>
+	<issue>https://github.com/paulkjoseph/cordova-plugin-media-streaming-service/issues</issue>
+    <keywords>cordova,background,foreground,service,media,audio,exoplayer</keywords>
+
+    <engines>
+        <!-- <engine name="cordova" version=">=8.0.0" /> -->
+        <engine name="cordova-android" version=">=4.0.0"/>
+        <!-- <engine name="android-sdk" version=">=26" /> -->
+    </engines>
+
+    <asset src="www/mediastreaming.js" target="js/mediastreaming.js"/>
+
+    <js-module src="www/mediastreaming.js" name="MediaStreamingService">
+        <clobbers target="cordova.plugins.mediaStreamingService" />
+    </js-module>
+
+    <platform name="android">
+        <framework src="androidx.appcompat:appcompat:1.0.2"/>
+        <framework src="com.google.android.exoplayer:exoplayer-core:2.9.6"/>
+        <framework src="com.google.android.exoplayer:exoplayer-ui:2.9.6"/>
+        <framework src="com.google.android.exoplayer:extension-mediasession:2.9.6"/>
+        <framework src="com.google.code.gson:gson:2.8.5"/>
+        <framework src="com.github.bumptech.glide:glide:4.9.0"/>
+        <framework src="com.github.bumptech.glide:compiler:4.9.0"/>
+
+        <config-file target="config.xml" parent="/*">
+            <feature name="MediaStreamingPlugin">
+                <param name="android-package" value="com.paulkjoseph.mediastreaming.MediaStreamingPlugin" />
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+			<uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+		</config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <service android:name="com.paulkjoseph.mediastreaming.MediaStreamingService" />
+            <!-- <service android:name="com.paulkjoseph.mediastreaming.MediaStreamingService" android:stopWithTask="true"/> -->
+        </config-file>
+
+        <source-file src="src/res/values/strings.xml" target-dir="res/values/"/>
+
+        <source-file src="src/res/drawable/media_streaming.png" target-dir="res/drawable/"/>
+
+        <source-file src="src/android/MediaStreamingPlugin.java" target-dir="src/com/paulkjoseph/mediastreaming" />
+        <source-file src="src/android/MediaStreamingService.java" target-dir="src/com/paulkjoseph/mediastreaming" />
+
+    </platform>
+
+</plugin>

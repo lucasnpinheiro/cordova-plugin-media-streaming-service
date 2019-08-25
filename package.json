@@ -1,0 +1,36 @@
+{
+    "name": "cordova-plugin-media-streaming-service",
+    "version": "1.0.0",
+    "description": "Media streaming service with ongoing notification.",
+    "cordova": {
+      "id": "cordova-plugin-media-streaming-service",
+      "platforms": [
+        "android"
+      ]
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/paulkjoseph/cordova-plugin-media-streaming-service"
+    },
+    "keywords": [
+      "ecosystem:cordova",
+      "cordova-android",
+      "phonegap",
+      "cordova",
+      "ionic",
+      "android",
+      "exoplayer",
+      "audio",
+      "player",
+      "cordova",
+      "background",
+      "foreground",
+      "service"
+    ],
+    "author": "Paul Kibe Njuguna",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/paulkjoseph/cordova-plugin-media-streaming-service/issues"
+    },
+    "homepage": "https://github.com/paulkjoseph/cordova-plugin-media-streaming-service"
+  }
