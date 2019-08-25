@@ -48,7 +48,7 @@
             <!-- <service android:name="com.paulkjoseph.mediastreaming.MediaStreamingService" android:stopWithTask="true"/> -->
         </config-file>
 
-        <source-file src="src/res/values/strings.xml" target-dir="res/values/"/>
+        <!-- <source-file src="src/res/values/strings.xml" target-dir="res/values/"/> -->
 
         <source-file src="src/res/drawable/media_streaming.png" target-dir="res/drawable/"/>
 
