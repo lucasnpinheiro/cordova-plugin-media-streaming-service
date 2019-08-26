@@ -21,7 +21,7 @@ public class MediaStreamingPlugin extends CordovaPlugin {
 
         if (android.os.Build.VERSION.SDK_INT >= 26 && action != null && args != null) {
             Activity activity = cordova.getActivity();
-            Intent intent = new Intent(activity, ForegroundService.class);
+            Intent intent = new Intent(activity, MediaStreamingService.class);
 
             if (action.equals("start")) {
                 if (args.length() > 4) {
