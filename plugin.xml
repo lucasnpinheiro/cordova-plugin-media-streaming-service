@@ -3,7 +3,7 @@
         id="cordova-plugin-media-streaming-service"
         version="1.0.0">
 
-    <name>MediaStreamingService</name>
+    <name>Cordova Media Streaming Service</name>
     <description>Media streaming service with ongoing notification.</description>
     <license>MIT</license>
     <author>Paul Kibe Njuguna</author>
@@ -12,26 +12,19 @@
     <keywords>cordova,background,foreground,service,media,audio,exoplayer</keywords>
 
     <engines>
-        <!-- <engine name="cordova" version=">=8.0.0" /> -->
         <engine name="cordova-android" version=">=4.0.0"/>
-        <!-- <engine name="android-sdk" version=">=26" /> -->
     </engines>
 
-    <asset src="www/mediastreaming.js" target="js/mediastreaming.js"/>
-
     <js-module src="www/mediastreaming.js" name="MediaStreamingService">
-        <clobbers target="MediaStreamingService" />
+        <clobbers target="cordova.plugins.mediaStreamingService" />
     </js-module>
 
     <platform name="android">
-        <!-- <framework src="androidx.appcompat:appcompat:1.0.2"/> -->
         <framework src="com.google.android.exoplayer:exoplayer-core:2.9.6"/>
         <framework src="com.google.android.exoplayer:exoplayer-ui:2.9.6"/>
         <framework src="com.google.android.exoplayer:extension-mediasession:2.9.6"/>
         <framework src="com.squareup.picasso:picasso:2.71828"/>
         <framework src="com.google.code.gson:gson:2.8.5"/>
-        <!-- <framework src="com.github.bumptech.glide:glide:4.9.0"/> -->
-        <!-- <framework src="com.github.bumptech.glide:compiler:4.9.0"/> -->
 
         <config-file target="config.xml" parent="/*">
             <feature name="MediaStreamingPlugin">
@@ -47,8 +40,6 @@
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <service android:name="com.paulkjoseph.mediastreaming.MediaStreamingService" android:stopWithTask="true"/>
         </config-file>
-
-        <!-- <source-file src="src/res/values/strings.xml" target-dir="res/values/"/> -->
 
         <source-file src="src/res/drawable/media_streaming.png" target-dir="res/drawable/"/>
 
