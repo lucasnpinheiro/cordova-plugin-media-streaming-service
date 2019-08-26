@@ -23,7 +23,7 @@
         <framework src="com.google.android.exoplayer:exoplayer-core:2.9.6"/>
         <framework src="com.google.android.exoplayer:exoplayer-ui:2.9.6"/>
         <framework src="com.google.android.exoplayer:extension-mediasession:2.9.6"/>
-        <framework src="com.squareup.picasso:picasso:2.71828"/>
+        <framework src="com.squareup.picasso:picasso:2.5.2"/>
         <framework src="com.google.code.gson:gson:2.8.5"/>
 
         <config-file target="config.xml" parent="/*">

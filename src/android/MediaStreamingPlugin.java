@@ -1,9 +1,10 @@
 package com.paulkjoseph.mediastreaming;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import com.google.android.exoplayer2.util.Util;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -15,66 +16,84 @@ public class MediaStreamingPlugin extends CordovaPlugin {
     private final static String TAG = MediaStreamingPlugin.class.getName();
 
     @Override
-    @TargetApi(26)
     public boolean execute(final String action, final JSONArray args, final CallbackContext command) throws JSONException {
         Log.i(TAG, "execute-[action]: " + action + ", [args]: " + args + ", [command]: " + command);
 
-        if (android.os.Build.VERSION.SDK_INT >= 26 && action != null && args != null) {
-            Activity activity = cordova.getActivity();
-            Intent intent = new Intent(activity, MediaStreamingService.class);
+        Context context = cordova.getActivity().getApplicationContext();
 
-            if (action.equals("start")) {
-                if (args.length() > 4) {
-                    Log.i(TAG, "execute: start");
-                    intent.setAction("start");
-                    intent.putExtra("channelId", args.getString(0))
-                            .putExtra("channelName", args.getString(1))
-                            .putExtra("notificationId", args.getString(2))
-                            .putExtra("mediaStreams", args.getString(3))
-                            .putExtra("selectedIndex", args.getString(4));
-                    activity.getApplicationContext().startForegroundService(intent);
-                } else {
-                    String message = "Invalid request. Args should contain atleast 5 elements but found " + args.length();
-                    Log.e(TAG, "execute-start[error]:  " + message);
-                    command.error(message);
-                }
-            } else if (action.equals("play")) {
-                if (args.length() > 0) {
-                    Log.i(TAG, "execute: play");
-                    intent.setAction("start");
-                    intent.putExtra("selectedIndex", args.getString(0));
-                    activity.getApplicationContext().startService(intent);
-                } else {
-                    String message = "Invalid request. Args should contain atleast 5 elements but found " + args.length();
-                    Log.e(TAG, "execute-play[error]:  " + message);
-                    command.error(message);
-                }
-            } else if (action.equals("pause")) {
-                Log.i(TAG, "execute: pause");
-                intent.setAction("pause");
-                activity.getApplicationContext().startService(intent);
-            } else if (action.equals("stop")) {
-                Log.i(TAG, "execute: stop");
-                intent.setAction("stop");
-                activity.getApplicationContext().startService(intent);
-            } else {
-                String message = "Requested action [" + action + "] not yet implemented";
-                Log.e(TAG, "execute[action]: " + message);
-                command.error(message);
-            }
-        }
-
-        if (command != null) {
-            String message = "Service executed successfully";
-            Log.i(TAG, "execute[command.success(message)]: " + message);
-            command.success(message);
-        } else {
-            String message = "Unable to execute command since its either null or empty!";
-            Log.i(TAG, "execute[command.error(message)]: " + message);
-            command.error(message);
-        }
+        handleAction(context, action, args, command);
 
         return true;
     }
 
+    private void handleAction(final Context context, final String action, final JSONArray args, final CallbackContext command) {
+        String message = null;
+        try {
+            if (action != null && args != null) {
+                MediaPlayerState requestedAction = null;
+                try {
+                    requestedAction = MediaPlayerState.valueOf(action);
+                } catch (Exception ex) {
+                    Log.e(TAG, "handleAction[error-action]: " + action, ex);
+                }
+                if (requestedAction == MediaPlayerState.start) {
+                    if (args.length() > 4) {
+                        Log.i(TAG, "handleAction: start");
+                        Intent intent = new Intent(context, MediaStreamingService.class);
+                        intent.setAction("start");
+                        intent.putExtra("channelId", args.getString(0))
+                                .putExtra("channelName", args.getString(1))
+                                .putExtra("notificationId", args.getString(2))
+                                .putExtra("mediaStreams", args.getString(3))
+                                .putExtra("selectedIndex", args.getString(4));
+                        Util.startForegroundService(context, intent);
+                    } else {
+                        message = "Invalid request. Args should contain atleast 5 elements but found " + args.length();
+                        Log.e(TAG, "handleAction-start[error]:  " + message);
+                    }
+                } else if (requestedAction == MediaPlayerState.play) {
+                    if (args.length() > 0) {
+                        Log.i(TAG, "handleAction: play");
+                        Intent intent = new Intent(context, MediaStreamingService.class);
+                        intent.setAction("start");
+                        intent.putExtra("selectedIndex", args.getString(0));
+                        Util.startForegroundService(context, intent);
+                    } else {
+                        message = "Invalid request. Args should contain atleast 5 elements but found " + args.length();
+                        Log.e(TAG, "handleAction-play[error]:  " + message);
+                    }
+                } else if (requestedAction == MediaPlayerState.pause) {
+                    Log.i(TAG, "handleAction: pause");
+                    Intent intent = new Intent(context, MediaStreamingService.class);
+                    intent.setAction("pause");
+                    Util.startForegroundService(context, intent);
+                } else if (requestedAction == MediaPlayerState.stop) {
+                    Log.i(TAG, "handleAction: stop");
+                    Intent intent = new Intent(context, MediaStreamingService.class);
+                    intent.setAction("stop");
+                    Util.startForegroundService(context, intent);
+                } else {
+                    message = "Requested action [" + action + "] not yet implemented";
+                    Log.e(TAG, "handleAction[action]: " + message);
+                }
+            }
+        } catch (Exception ex) {
+            message = "Unable to process action [" + action + "]. Error: " + ex.getMessage();
+            Log.e(TAG, "handleAction[error]: " + message, ex);
+        }
+
+        if (command != null) {
+            if (message != null) {
+                command.error(message);
+            } else {
+                message = "Service executed successfully";
+                Log.i(TAG, "handleAction[command.success(message)]: " + message);
+                command.success(message);
+            }
+        } else {
+            message = "Unable to execute command since its either null or empty!";
+            Log.i(TAG, "handleAction[command.error(message)]: " + message);
+        }
+
+    }
 }
