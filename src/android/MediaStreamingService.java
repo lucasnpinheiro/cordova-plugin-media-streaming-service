@@ -33,10 +33,10 @@ import com.google.android.exoplayer2.ui.PlayerNotificationManager.NotificationLi
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import org.apache.cordova.CordovaActivity;
+
 import java.util.List;
 
-import br.com.williarts.radio.fmsaojoao53.MainActivity;
-import br.com.williarts.radio.fmsaojoao53.R;
 
 import static com.paulkjoseph.mediastreaming.Constants.DEFAULT_CHANNEL_ID;
 import static com.paulkjoseph.mediastreaming.Constants.DEFAULT_NOTIFICATION_ID;
@@ -72,6 +72,7 @@ public class MediaStreamingService extends Service {
     @Override
     public void onDestroy() {
         Log.i(TAG, "onDestroy[context]: " + (context != null));
+        close();
         super.onDestroy();
     }
 
@@ -91,9 +92,10 @@ public class MediaStreamingService extends Service {
     }
 
     private void initPlayer(@NonNull final Context context) {
+
         player = ExoPlayerFactory.newSimpleInstance(context, new DefaultTrackSelector());
         DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(
-                context, Util.getUserAgent(context, getString(R.string.app_name)));
+                context, Util.getUserAgent(context, mediaStreamRequest.getChannelName()));
 
         ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource();
         for (MediaStream mediaStream : mediaStreamRequest.getMediaStreams()) {
@@ -121,7 +123,7 @@ public class MediaStreamingService extends Service {
         playerNotificationManager = PlayerNotificationManager.createWithNotificationChannel(
                 context,
                 mediaStreamRequest.getChannelId(),
-                R.string.app_name,
+                com.google.android.exoplayer2.ui.R.string.exo_track_stereo,
                 mediaStreamRequest.getNotificationId(),
                 new MediaDescriptionAdapter() {
                     @Override
@@ -132,8 +134,15 @@ public class MediaStreamingService extends Service {
                     @Nullable
                     @Override
                     public PendingIntent createCurrentContentIntent(Player player) {
-                        Intent intent = new Intent(context, MainActivity.class);
-                        return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        String className = mediaStreamRequest.getMediaStreams().get(player.getCurrentWindowIndex()).getIdentifier() + ".MainActivity";
+                        try {
+                            Intent intent = new Intent(context, Class.forName(className));
+                            return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        } catch (Exception ex) {
+                            Log.e(TAG, "createCurrentContentIntent[className]: " + className, ex);
+                            Intent intent = new Intent(context, CordovaActivity.class);
+                            return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        }
                     }
 
                     @Nullable
@@ -161,6 +170,12 @@ public class MediaStreamingService extends Service {
                 stopSelf();
             }
         });
+        playerNotificationManager.setUseNavigationActions(false);
+        playerNotificationManager.setFastForwardIncrementMs(0);
+        playerNotificationManager.setRewindIncrementMs(0);
+        playerNotificationManager.setStopAction(null);
+        playerNotificationManager.setColorized(true);
+        playerNotificationManager.setUseChronometer(false);
         playerNotificationManager.setPlayer(player);
 
         mediaSession = new MediaSessionCompat(context, MEDIA_SESSION_TAG);
@@ -194,14 +209,16 @@ public class MediaStreamingService extends Service {
             int notificationId = DEFAULT_NOTIFICATION_ID;
             try {
                 notificationId = Integer.getInteger(intent.getStringExtra(KEY_NOTIFICATION_ID)).intValue();
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
             Log.i(TAG, "handleIntent[notificationId]: " + notificationId);
             final List<MediaStream> mediaStreams = MediaStreamUtils.deserializeMediaStreams(intent.getStringExtra(KEY_MEDIA_STREAMS));
             Log.i(TAG, "handleIntent[mediaStreams]: " + mediaStreams);
             int selectedIndex = DEFAULT_SELECTED_INDEX;
             try {
                 selectedIndex = Integer.getInteger(intent.getStringExtra(KEY_SELECTED_INDEX)).intValue();
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
             Log.i(TAG, "handleIntent[selectedIndex]: " + selectedIndex);
             mediaStreamRequest = new MediaStreamRequest(channelId == null ? DEFAULT_CHANNEL_ID : channelId, channelName, notificationId, mediaStreams, selectedIndex);
         } else {

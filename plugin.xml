@@ -38,7 +38,7 @@
 		</config-file>
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <service android:name="com.paulkjoseph.mediastreaming.MediaStreamingService" android:stopWithTask="true"/>
+            <service android:name="com.paulkjoseph.mediastreaming.MediaStreamingService" />
         </config-file>
 
         <source-file src="src/res/drawable/media_streaming.png" target-dir="res/drawable/"/>
