@@ -43,6 +43,11 @@
 
         <source-file src="src/res/drawable/media_streaming.png" target-dir="res/drawable/"/>
 
+        <source-file src="src/android/Constants.java" target-dir="src/com/paulkjoseph/mediastreaming" />
+        <source-file src="src/android/MediaPlayerState.java" target-dir="src/com/paulkjoseph/mediastreaming" />
+        <source-file src="src/android/MediaStream.java" target-dir="src/com/paulkjoseph/mediastreaming" />
+        <source-file src="src/android/MediaStreamRequest.java" target-dir="src/com/paulkjoseph/mediastreaming" />
+        <source-file src="src/android/MediaStreamUtils.java" target-dir="src/com/paulkjoseph/mediastreaming" />
         <source-file src="src/android/MediaStreamingPlugin.java" target-dir="src/com/paulkjoseph/mediastreaming" />
         <source-file src="src/android/MediaStreamingService.java" target-dir="src/com/paulkjoseph/mediastreaming" />
 
