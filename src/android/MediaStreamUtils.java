@@ -57,7 +57,7 @@ public final class MediaStreamUtils {
 
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
-                callback.onBitmap(getBitmap(context, R.drawable.media_streaming));
+                // callback.onBitmap(getBitmap(context, R.drawable.media_streaming));
             }
 
             @Override
