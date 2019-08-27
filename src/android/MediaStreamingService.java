@@ -172,9 +172,6 @@ public class MediaStreamingService extends Service {
         playerNotificationManager.setUseNavigationActions(false);
         playerNotificationManager.setFastForwardIncrementMs(0);
         playerNotificationManager.setRewindIncrementMs(0);
-        playerNotificationManager.setStopAction(null);
-        playerNotificationManager.setColorized(true);
-        playerNotificationManager.setUseChronometer(false);
         playerNotificationManager.setPlayer(player);
 
         mediaSession = new MediaSessionCompat(context, MEDIA_SESSION_TAG);
