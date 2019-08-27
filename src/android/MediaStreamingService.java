@@ -72,7 +72,6 @@ public class MediaStreamingService extends Service {
     @Override
     public void onDestroy() {
         Log.i(TAG, "onDestroy[context]: " + (context != null));
-        close();
         super.onDestroy();
     }
 
