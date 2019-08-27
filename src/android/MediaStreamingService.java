@@ -111,10 +111,28 @@ public class MediaStreamingService extends Service {
             }
 
             @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                Intent intent = new Intent();
+                intent.setAction("com.paulkjoseph.mediastreaming.broadcast.MEDIA_STREAM");
+                if (playWhenReady && playbackState == Player.STATE_READY) {
+                    Log.i(TAG, "onPlayerStateChanged[Active playback]: ");
+                    intent.putExtra("data","ACTIVE_PLAYBACK");
+                } else if (playWhenReady) {
+                    Log.i(TAG, "onPlayerStateChanged[Not playing because playback ended, the player is buffering, stopped or failed. Check playbackState and player.getPlaybackError for details.]: ");
+                    intent.putExtra("data","PLAYBACK_ENDED");
+                } else {
+                    Log.i(TAG, "onPlayerStateChanged[Paused by app.]: ");
+                    intent.putExtra("data","PAUSED_BY_APP");
+                }
+                sendBroadcast(intent);
+            }
+
+            @Override
             public void onPositionDiscontinuity(int reason) {
                 Log.i(TAG, "onPositionDiscontinuity[reason]: " + reason);
             }
         });
+
         player.prepare(concatenatingMediaSource);
         player.seekTo(mediaStreamRequest.getSelectedIndex(), C.TIME_UNSET);
         player.setPlayWhenReady(true);
