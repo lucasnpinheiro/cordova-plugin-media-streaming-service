@@ -33,10 +33,9 @@ import com.google.android.exoplayer2.ui.PlayerNotificationManager.NotificationLi
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
-import org.apache.cordova.CordovaActivity;
-
 import java.util.List;
 
+import br.com.williarts.radio.fmsaojoao53.MainActivity;
 import br.com.williarts.radio.fmsaojoao53.R;
 
 import static com.paulkjoseph.mediastreaming.Constants.DEFAULT_CHANNEL_ID;
@@ -134,7 +133,7 @@ public class MediaStreamingService extends Service {
                     @Nullable
                     @Override
                     public PendingIntent createCurrentContentIntent(Player player) {
-                        Intent intent = new Intent(context, CordovaActivity.class);
+                        Intent intent = new Intent(context, MainActivity.class);
                         return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     }
 
@@ -215,7 +214,7 @@ public class MediaStreamingService extends Service {
         Log.i(TAG, "loadPlayer[currentState]: " + currentState + ", [mediaStreamRequest]: " + mediaStreamRequest);
         if (player == null) {
             Log.i(TAG, "loadPlayer[player]: player == null");
-            if (mediaStreamRequest != null && mediaStreamRequest.getMediaStreams() != null) {
+            if (mediaStreamRequest != null && mediaStreamRequest.getMediaStreams() != null && mediaStreamRequest.getMediaStreams().size() > 0) {
                 initPlayer(context);
             }
         } else if (intent != null) {

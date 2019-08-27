@@ -11,6 +11,12 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import static com.paulkjoseph.mediastreaming.Constants.KEY_CHANNEL_ID;
+import static com.paulkjoseph.mediastreaming.Constants.KEY_CHANNEL_NAME;
+import static com.paulkjoseph.mediastreaming.Constants.KEY_MEDIA_STREAMS;
+import static com.paulkjoseph.mediastreaming.Constants.KEY_NOTIFICATION_ID;
+import static com.paulkjoseph.mediastreaming.Constants.KEY_SELECTED_INDEX;
+
 public class MediaStreamingPlugin extends CordovaPlugin {
 
     private final static String TAG = MediaStreamingPlugin.class.getName();
@@ -41,11 +47,11 @@ public class MediaStreamingPlugin extends CordovaPlugin {
                         Log.i(TAG, "handleAction: start");
                         Intent intent = new Intent(context, MediaStreamingService.class);
                         intent.setAction("start");
-                        intent.putExtra("channelId", args.getString(0))
-                                .putExtra("channelName", args.getString(1))
-                                .putExtra("notificationId", args.getString(2))
-                                .putExtra("mediaStreams", args.getString(3))
-                                .putExtra("selectedIndex", args.getString(4));
+                        intent.putExtra(KEY_CHANNEL_ID, args.getString(0))
+                                .putExtra(KEY_CHANNEL_NAME, args.getString(1))
+                                .putExtra(KEY_NOTIFICATION_ID, args.getString(2))
+                                .putExtra(KEY_MEDIA_STREAMS, args.getString(3))
+                                .putExtra(KEY_SELECTED_INDEX, args.getString(4));
                         Util.startForegroundService(context, intent);
                     } else {
                         message = "Invalid request. Args should contain atleast 5 elements but found " + args.length();
@@ -56,7 +62,7 @@ public class MediaStreamingPlugin extends CordovaPlugin {
                         Log.i(TAG, "handleAction: play");
                         Intent intent = new Intent(context, MediaStreamingService.class);
                         intent.setAction("start");
-                        intent.putExtra("selectedIndex", args.getString(0));
+                        intent.putExtra(KEY_SELECTED_INDEX, args.getString(0));
                         Util.startForegroundService(context, intent);
                     } else {
                         message = "Invalid request. Args should contain atleast 5 elements but found " + args.length();
