@@ -212,7 +212,7 @@ public class MediaStreamingService extends Service {
 
     private void loadPlayer(final Intent intent) {
         Log.i(TAG, "loadPlayer[currentState]: " + currentState + ", [mediaStreamRequest]: " + mediaStreamRequest);
-        if (player == null) {
+        if (player == null && intent != null) {
             Log.i(TAG, "loadPlayer[player]: player == null");
             if (mediaStreamRequest != null && mediaStreamRequest.getMediaStreams() != null && mediaStreamRequest.getMediaStreams().size() > 0) {
                 initPlayer(context);

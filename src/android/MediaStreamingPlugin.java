@@ -42,11 +42,11 @@ public class MediaStreamingPlugin extends CordovaPlugin {
                 } catch (Exception ex) {
                     Log.e(TAG, "handleAction[error-action]: " + action, ex);
                 }
-                if (requestedAction == MediaPlayerState.start) {
+                if (requestedAction != null) {
                     if (args.length() > 4) {
-                        Log.i(TAG, "handleAction: start");
+                        Log.i(TAG, "handleAction[requestedAction]: "+requestedAction);
                         Intent intent = new Intent(context, MediaStreamingService.class);
-                        intent.setAction("start");
+                        intent.setAction(requestedAction.name());
                         intent.putExtra(KEY_CHANNEL_ID, args.getString(0))
                                 .putExtra(KEY_CHANNEL_NAME, args.getString(1))
                                 .putExtra(KEY_NOTIFICATION_ID, args.getString(2))
@@ -55,29 +55,8 @@ public class MediaStreamingPlugin extends CordovaPlugin {
                         Util.startForegroundService(context, intent);
                     } else {
                         message = "Invalid request. Args should contain atleast 5 elements but found " + args.length();
-                        Log.e(TAG, "handleAction-start[error]:  " + message);
+                        Log.e(TAG, "handleAction[requestedAction]: " + requestedAction + ", [error]:  " + message);
                     }
-                } else if (requestedAction == MediaPlayerState.play) {
-                    if (args.length() > 0) {
-                        Log.i(TAG, "handleAction: play");
-                        Intent intent = new Intent(context, MediaStreamingService.class);
-                        intent.setAction("start");
-                        intent.putExtra(KEY_SELECTED_INDEX, args.getString(0));
-                        Util.startForegroundService(context, intent);
-                    } else {
-                        message = "Invalid request. Args should contain atleast 5 elements but found " + args.length();
-                        Log.e(TAG, "handleAction-play[error]:  " + message);
-                    }
-                } else if (requestedAction == MediaPlayerState.pause) {
-                    Log.i(TAG, "handleAction: pause");
-                    Intent intent = new Intent(context, MediaStreamingService.class);
-                    intent.setAction("pause");
-                    Util.startForegroundService(context, intent);
-                } else if (requestedAction == MediaPlayerState.stop) {
-                    Log.i(TAG, "handleAction: stop");
-                    Intent intent = new Intent(context, MediaStreamingService.class);
-                    intent.setAction("stop");
-                    Util.startForegroundService(context, intent);
                 } else {
                     message = "Requested action [" + action + "] not yet implemented";
                     Log.e(TAG, "handleAction[action]: " + message);
