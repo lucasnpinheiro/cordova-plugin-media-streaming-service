@@ -29,14 +29,14 @@ public final class MediaStreamUtils {
     public static MediaDescriptionCompat getMediaDescription(Context context, MediaStream mediaStream) {
         Log.i(TAG, "getMediaDescription[mediaStream]: " + mediaStream);
         Bundle extras = new Bundle();
-        Bitmap bitmap = getBitmap(context, R.drawable.media_streaming);
+        // Bitmap bitmap = getBitmap(context, R.drawable.media_streaming);
         extras.putParcelable(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, Uri.parse(mediaStream.getCover()));
         extras.putParcelable(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI, Uri.parse(mediaStream.getCover()));
         String description = mediaStream.getDescription() != null && !mediaStream.getDescription().equals(mediaStream.getTitle()) ? mediaStream.getDescription() : null;
         return new MediaDescriptionCompat.Builder()
                 .setMediaId(mediaStream.getIdentifier())
                 .setIconUri(mediaStream.getCover() != null ? Uri.parse(mediaStream.getCover()) : null)
-                .setIconBitmap(mediaStream.getCover() == null ? bitmap : null)
+                // .setIconBitmap(mediaStream.getCover() == null ? bitmap : null)
                 .setTitle(mediaStream.getTitle())
                 .setDescription(description)
                 .setExtras(extras)
