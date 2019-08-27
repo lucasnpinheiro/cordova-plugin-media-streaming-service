@@ -12,5 +12,8 @@ module.exports = {
   },
   stop: function(options, successCallback, errorCallback) {
     exec(successCallback, errorCallback, "MediaStreamingPlugin", "stop", [options.channelId || "playback_channel", options.channelName || "Playback", options.notificationId || "1", JSON.stringify(options.mediaStreams || []), options.selectedIndex || "0"]);
+  },
+  close: function(options, successCallback, errorCallback) {
+    exec(successCallback, errorCallback, "MediaStreamingPlugin", "close", [options.channelId || "playback_channel", options.channelName || "Playback", options.notificationId || "1", JSON.stringify(options.mediaStreams || []), options.selectedIndex || "0"]);
   }
 };
