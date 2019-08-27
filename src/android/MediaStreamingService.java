@@ -37,7 +37,6 @@ import org.apache.cordova.CordovaActivity;
 
 import java.util.List;
 
-
 import static com.paulkjoseph.mediastreaming.Constants.DEFAULT_CHANNEL_ID;
 import static com.paulkjoseph.mediastreaming.Constants.DEFAULT_NOTIFICATION_ID;
 import static com.paulkjoseph.mediastreaming.Constants.DEFAULT_SELECTED_INDEX;

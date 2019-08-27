@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import br.com.williarts.radio.fmsaojoao53.R;
 
 public final class MediaStreamUtils {
 
