@@ -43,10 +43,12 @@ import static com.paulkjoseph.mediastreaming.Constants.DEFAULT_NOTIFICATION_ID;
 import static com.paulkjoseph.mediastreaming.Constants.DEFAULT_SELECTED_INDEX;
 import static com.paulkjoseph.mediastreaming.Constants.KEY_CHANNEL_ID;
 import static com.paulkjoseph.mediastreaming.Constants.KEY_CHANNEL_NAME;
+import static com.paulkjoseph.mediastreaming.Constants.KEY_DATA;
 import static com.paulkjoseph.mediastreaming.Constants.KEY_MEDIA_STREAMS;
 import static com.paulkjoseph.mediastreaming.Constants.KEY_NOTIFICATION_ID;
 import static com.paulkjoseph.mediastreaming.Constants.KEY_SELECTED_INDEX;
 import static com.paulkjoseph.mediastreaming.Constants.MEDIA_SESSION_TAG;
+import static com.paulkjoseph.mediastreaming.Constants.MSG_MEDIA_STREAM_FAILED;
 
 public class MediaStreamingService extends Service {
 
@@ -60,7 +62,6 @@ public class MediaStreamingService extends Service {
 
     private MediaStreamRequest mediaStreamRequest;
     private MediaPlayerState currentState = MediaPlayerState.play;
-    private String messageInfo = "Não foi possivel execultar o conteudo do stream informado.";
 
     @Override
     public void onCreate() {
@@ -108,7 +109,7 @@ public class MediaStreamingService extends Service {
             public void onPlayerError(ExoPlaybackException error) {
                 Log.e(TAG, "onPlayerError[ExoPlaybackException]: ", error);
                 stop();
-                Toast.makeText(context, messageInfo, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, MSG_MEDIA_STREAM_FAILED, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -116,13 +117,13 @@ public class MediaStreamingService extends Service {
                 Intent intent = new Intent("MEDIA_STREAMING_SERVICE");
                 if (playWhenReady && playbackState == Player.STATE_READY) {
                     Log.i(TAG, "onPlayerStateChanged[Active playback]: ");
-                    intent.putExtra("data","ACTIVE_PLAYBACK");
+                    intent.putExtra(KEY_DATA, "ACTIVE_PLAYBACK");
                 } else if (playWhenReady) {
                     Log.i(TAG, "onPlayerStateChanged[Not playing because playback ended, the player is buffering, stopped or failed. Check playbackState and player.getPlaybackError for details.]: ");
-                    intent.putExtra("data","PLAYBACK_ENDED");
+                    intent.putExtra(KEY_DATA, "PLAYBACK_ENDED");
                 } else {
                     Log.i(TAG, "onPlayerStateChanged[Paused by app.]: ");
-                    intent.putExtra("data","PAUSED_BY_APP");
+                    intent.putExtra(KEY_DATA, "PAUSED_BY_APP");
                 }
                 LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent);
             }

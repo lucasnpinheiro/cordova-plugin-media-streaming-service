@@ -44,7 +44,7 @@ public class MediaStreamingPlugin extends CordovaPlugin {
                 }
                 if (requestedAction != null) {
                     if (args.length() > 4) {
-                        Log.i(TAG, "handleAction[requestedAction]: "+requestedAction);
+                        Log.i(TAG, "handleAction[requestedAction]: " + requestedAction);
                         Intent intent = new Intent(context, MediaStreamingService.class);
                         intent.setAction(requestedAction.name());
                         intent.putExtra(KEY_CHANNEL_ID, args.getString(0))
