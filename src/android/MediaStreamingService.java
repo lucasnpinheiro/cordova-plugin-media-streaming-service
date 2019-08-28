@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
@@ -112,8 +113,7 @@ public class MediaStreamingService extends Service {
 
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                Intent intent = new Intent();
-                intent.setAction("com.paulkjoseph.mediastreaming.broadcast.MEDIA_STREAM");
+                Intent intent = new Intent("MEDIA_STREAMING_SERVICE");
                 if (playWhenReady && playbackState == Player.STATE_READY) {
                     Log.i(TAG, "onPlayerStateChanged[Active playback]: ");
                     intent.putExtra("data","ACTIVE_PLAYBACK");
@@ -124,7 +124,8 @@ public class MediaStreamingService extends Service {
                     Log.i(TAG, "onPlayerStateChanged[Paused by app.]: ");
                     intent.putExtra("data","PAUSED_BY_APP");
                 }
-                sendBroadcast(intent);
+                // sendBroadcast(intent);
+                LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent);
             }
 
             @Override
