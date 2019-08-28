@@ -183,7 +183,7 @@ public class MediaStreamingService extends Service {
                 stopSelf();
             }
         });
-        playerNotificationManager.setUseNavigationActions(false);
+        playerNotificationManager.setUseNavigationActions(mediaStreamRequest.getMediaStreams().size() > 1);
         playerNotificationManager.setFastForwardIncrementMs(0);
         playerNotificationManager.setRewindIncrementMs(0);
         playerNotificationManager.setPlayer(player);
