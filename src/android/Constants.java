@@ -13,6 +13,9 @@ public final class Constants {
     public static final String KEY_NOTIFICATION_ID = "notificationId";
     public static final String KEY_MEDIA_STREAMS = "mediaStreams";
     public static final String KEY_SELECTED_INDEX = "selectedIndex";
+    public static final String KEY_DATA = "data";
+
+    public static final String MSG_MEDIA_STREAM_FAILED = "Não foi possivel execultar o conteudo do stream informado.";
 
     private Constants() {
         throw new IllegalStateException("Constants class");
