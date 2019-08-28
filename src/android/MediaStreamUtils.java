@@ -7,14 +7,17 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.exoplayer2.ui.PlayerNotificationManager;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,23 +50,18 @@ public final class MediaStreamUtils {
 
     public static void loadBitmapFromUrl(Context context, String url, final PlayerNotificationManager.BitmapCallback callback) {
         Log.i(TAG, "loadBitmapFromUrl[url]: " + url);
-        Picasso.with(context).load(Uri.parse(url)).into(new Target() {
+        Glide.with(context).asBitmap().load(Uri.parse(url)).into(new CustomTarget<Bitmap>() {
             @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                callback.onBitmap(bitmap);
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                callback.onBitmap(resource);
+                Log.i(TAG, "onResourceReady[resource]: " + resource);
             }
 
             @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-                 callback.onBitmap(getBitmap(context, android.R.drawable.stat_sys_headset));
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                Log.i(TAG, "onPrepareLoad[placeHolderDrawable]: " + placeHolderDrawable);
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+                Log.i(TAG, "onLoadCleared[placeholder]: " + placeholder);
             }
         });
-
     }
 
     public static List<MediaStream> deserializeMediaStreams(String jsonString) {

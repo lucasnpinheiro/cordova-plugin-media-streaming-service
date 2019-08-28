@@ -124,7 +124,6 @@ public class MediaStreamingService extends Service {
                     Log.i(TAG, "onPlayerStateChanged[Paused by app.]: ");
                     intent.putExtra("data","PAUSED_BY_APP");
                 }
-                // sendBroadcast(intent);
                 LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent);
             }
 
@@ -133,7 +132,6 @@ public class MediaStreamingService extends Service {
                 Log.i(TAG, "onPositionDiscontinuity[reason]: " + reason);
             }
         });
-
         player.prepare(concatenatingMediaSource);
         player.seekTo(mediaStreamRequest.getSelectedIndex(), C.TIME_UNSET);
         player.setPlayWhenReady(true);
