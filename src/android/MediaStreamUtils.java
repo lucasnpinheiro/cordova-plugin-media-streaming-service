@@ -1,6 +1,7 @@
 package com.paulkjoseph.mediastreaming;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
@@ -22,6 +24,8 @@ import com.google.gson.Gson;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static com.paulkjoseph.mediastreaming.Constants.KEY_DATA;
 
 public final class MediaStreamUtils {
 
@@ -74,6 +78,12 @@ public final class MediaStreamUtils {
             Log.e(TAG, "deserializeMediaStreams[jsonString]: " + jsonString, ex);
         }
         return list;
+    }
+
+    public static void broadcastMessage(final Context context, String message) {
+        Intent intent = new Intent("MEDIA_STREAMING_SERVICE");
+        intent.putExtra(KEY_DATA, message);
+        LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent);
     }
 
 }
