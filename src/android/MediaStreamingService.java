@@ -105,7 +105,6 @@ public class MediaStreamingService extends Service {
                 context, Util.getUserAgent(context, mediaStreamRequest.getChannelName()));
         ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource();
         for (MediaStream mediaStream : mediaStreamRequest.getMediaStreams()) {
-//            ExtractorMediaSource extractorMediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).;
             MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                     .setLoadErrorHandlingPolicy(new CustomLoadErrorHandlingPolicy())
                     .createMediaSource(Uri.parse(mediaStream.getUri()));
