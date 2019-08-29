@@ -43,7 +43,6 @@ public final class CustomLoadErrorHandlingPolicy extends DefaultLoadErrorHandlin
 
     @Override
     public int getMinimumLoadableRetryCount(int dataType) {
-        return 5;
+        return super.getMinimumLoadableRetryCount(dataType);
     }
 }
-
