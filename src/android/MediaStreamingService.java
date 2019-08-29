@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
@@ -21,6 +20,7 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
@@ -48,6 +48,7 @@ import static com.paulkjoseph.mediastreaming.Constants.KEY_NOTIFICATION_ID;
 import static com.paulkjoseph.mediastreaming.Constants.KEY_SELECTED_INDEX;
 import static com.paulkjoseph.mediastreaming.Constants.MEDIA_SESSION_TAG;
 import static com.paulkjoseph.mediastreaming.Constants.MSG_MEDIA_STREAM_FAILED;
+import static com.paulkjoseph.mediastreaming.Constants.PACKAGE_NAME;
 
 public class MediaStreamingService extends Service {
 
@@ -92,35 +93,48 @@ public class MediaStreamingService extends Service {
     }
 
     private void initPlayer(@NonNull final Context context) {
-
         player = ExoPlayerFactory.newSimpleInstance(context, new DefaultTrackSelector());
+
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(C.USAGE_MEDIA)
+                .setContentType(C.CONTENT_TYPE_SPEECH)
+                .build();
+        player.setAudioAttributes(audioAttributes, true);
+
         DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(
                 context, Util.getUserAgent(context, mediaStreamRequest.getChannelName()));
-
         ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource();
         for (MediaStream mediaStream : mediaStreamRequest.getMediaStreams()) {
+//            ExtractorMediaSource extractorMediaSource = new ExtractorMediaSource.Factory(dataSourceFactory).;
             MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+                    .setLoadErrorHandlingPolicy(new CustomLoadErrorHandlingPolicy())
                     .createMediaSource(Uri.parse(mediaStream.getUri()));
             concatenatingMediaSource.addMediaSource(mediaSource);
         }
+        player.prepare(concatenatingMediaSource);
+
         player.addListener(new Player.EventListener() {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
-                Log.e(TAG, "onPlayerError[error]: ", error);
+                final int currentWindowIndex = player.getCurrentWindowIndex();
+                Log.e(TAG, "onPlayerError[url]: " + mediaStreamRequest.getMediaStreams().get(player.getCurrentWindowIndex()).getUri(), error);
                 Toast.makeText(context, MSG_MEDIA_STREAM_FAILED, Toast.LENGTH_SHORT).show();
+                MediaStreamUtils.broadcastMessage(context, "PLAYBACK_ERROR", currentWindowIndex);
+                stopSelf();
             }
 
             @Override
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                final int currentWindowIndex = player.getCurrentWindowIndex();
                 if (playWhenReady && playbackState == Player.STATE_READY) {
                     Log.i(TAG, "onPlayerStateChanged[Active playback]: ");
-                    MediaStreamUtils.broadcastMessage(context, "ACTIVE_PLAYBACK");
+                    MediaStreamUtils.broadcastMessage(context, "ACTIVE_PLAYBACK", currentWindowIndex);
                 } else if (playWhenReady) {
                     Log.i(TAG, "onPlayerStateChanged[Not playing because playback ended, the player is buffering, stopped or failed. Check playbackState and player.getPlaybackError for details.]: ");
-                    MediaStreamUtils.broadcastMessage(context, "PLAYBACK_ENDED");
+                    MediaStreamUtils.broadcastMessage(context, "PLAYBACK_ENDED", currentWindowIndex);
                 } else {
                     Log.i(TAG, "onPlayerStateChanged[Paused by app.]: ");
-                    MediaStreamUtils.broadcastMessage(context, "PAUSED_BY_APP");
+                    MediaStreamUtils.broadcastMessage(context, "PAUSED_BY_APP", currentWindowIndex);
                 }
             }
 
@@ -129,7 +143,7 @@ public class MediaStreamingService extends Service {
                 Log.i(TAG, "onPositionDiscontinuity[reason]: " + reason);
             }
         });
-        player.prepare(concatenatingMediaSource);
+
         player.seekTo(mediaStreamRequest.getSelectedIndex(), C.TIME_UNSET);
         player.setPlayWhenReady(true);
 
@@ -147,15 +161,7 @@ public class MediaStreamingService extends Service {
                     @Nullable
                     @Override
                     public PendingIntent createCurrentContentIntent(Player player) {
-                        String className = mediaStreamRequest.getMediaStreams().get(player.getCurrentWindowIndex()).getIdentifier() + ".MainActivity";
-                        try {
-                            Intent intent = new Intent(context, Class.forName(className));
-                            return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        } catch (Exception ex) {
-                            Log.e(TAG, "createCurrentContentIntent[className]: " + className, ex);
-                            Intent intent = new Intent(context, CordovaActivity.class);
-                            return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        }
+                        return PendingIntent.getActivity(context, 0, getParentActivityIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
                     }
 
                     @Nullable
@@ -222,11 +228,11 @@ public class MediaStreamingService extends Service {
             } catch (Exception ex) {
             }
             Log.i(TAG, "handleIntent[notificationId]: " + notificationId);
-            final List<MediaStream> mediaStreams = MediaStreamUtils.deserializeMediaStreams(intent.getStringExtra(KEY_MEDIA_STREAMS));
+            List<MediaStream> mediaStreams = MediaStreamUtils.deserializeMediaStreams(intent.getStringExtra(KEY_MEDIA_STREAMS));
             Log.i(TAG, "handleIntent[mediaStreams]: " + mediaStreams);
             int selectedIndex = DEFAULT_SELECTED_INDEX;
             try {
-                selectedIndex = Integer.getInteger(intent.getStringExtra(KEY_SELECTED_INDEX)).intValue();
+                selectedIndex = Integer.valueOf(intent.getStringExtra(KEY_SELECTED_INDEX)).intValue();
             } catch (Exception ex) {
             }
             Log.i(TAG, "handleIntent[selectedIndex]: " + selectedIndex);
@@ -300,6 +306,21 @@ public class MediaStreamingService extends Service {
         if (player != null) {
             player.release();
             player = null;
+        }
+    }
+
+    private Intent getParentActivityIntent() {
+        String packageName = MediaStreamUtils.getPackageStartsWith(PACKAGE_NAME);
+        Log.i(TAG, "getParentActivityIntent[packageName]: " + packageName);
+        try {
+            if (packageName != null) {
+                return new Intent(context, Class.forName(packageName + ".MainActivity"));
+            } else {
+                return new Intent(context, CordovaActivity.class);
+            }
+        } catch (Exception ex) {
+            Log.e(TAG, "getParentActivityIntent[packageName]: " + packageName, ex);
+            return new Intent(context, CordovaActivity.class);
         }
     }
 

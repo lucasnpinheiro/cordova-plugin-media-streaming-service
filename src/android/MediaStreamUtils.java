@@ -25,13 +25,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.paulkjoseph.mediastreaming.Constants.KEY_CURRENT_WINDOW_INDEX;
 import static com.paulkjoseph.mediastreaming.Constants.KEY_DATA;
 
 public final class MediaStreamUtils {
 
     private static final String TAG = MediaStreamUtils.class.getName();
 
-    public static MediaDescriptionCompat getMediaDescription(Context context, MediaStream mediaStream) {
+    public static MediaDescriptionCompat getMediaDescription(final Context context, final MediaStream mediaStream) {
         Log.i(TAG, "getMediaDescription[mediaStream]: " + mediaStream);
         Bundle extras = new Bundle();
         Bitmap bitmap = getBitmap(context, android.R.drawable.stat_sys_headset);
@@ -48,11 +49,11 @@ public final class MediaStreamUtils {
                 .build();
     }
 
-    public static Bitmap getBitmap(Context context, @DrawableRes int bitmapResource) {
+    public static Bitmap getBitmap(final Context context, @DrawableRes final int bitmapResource) {
         return ((BitmapDrawable) context.getResources().getDrawable(bitmapResource)).getBitmap();
     }
 
-    public static void loadBitmapFromUrl(Context context, String url, final PlayerNotificationManager.BitmapCallback callback) {
+    public static void loadBitmapFromUrl(final Context context, final String url, final PlayerNotificationManager.BitmapCallback callback) {
         Log.i(TAG, "loadBitmapFromUrl[url]: " + url);
         Glide.with(context).asBitmap().load(Uri.parse(url)).into(new CustomTarget<Bitmap>() {
             @Override
@@ -68,7 +69,7 @@ public final class MediaStreamUtils {
         });
     }
 
-    public static List<MediaStream> deserializeMediaStreams(String jsonString) {
+    public static List<MediaStream> deserializeMediaStreams(final String jsonString) {
         List<MediaStream> list = Collections.emptyList();
         try {
             Log.i(TAG, "deserializeMediaStreams[jsonString]: " + jsonString);
@@ -80,10 +81,23 @@ public final class MediaStreamUtils {
         return list;
     }
 
-    public static void broadcastMessage(final Context context, String message) {
+    public static void broadcastMessage(final Context context, final String message, final int currentWindowIndex) {
         Intent intent = new Intent("MEDIA_STREAMING_SERVICE");
         intent.putExtra(KEY_DATA, message);
+        intent.putExtra(KEY_CURRENT_WINDOW_INDEX, currentWindowIndex);
         LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent);
+    }
+
+    public static String getPackageStartsWith(final String prefix) {
+        Package[] packages = Package.getPackages();
+        Log.i(TAG, "getPackageStartsWith[packages]: " + packages);
+        for (int i = 0; i < packages.length; i++) {
+            if (packages[i].getName().startsWith(prefix)) {
+                Log.i(TAG, "getPackageStartsWith[found-package]: " + packages[i].getName());
+                return packages[i].getName();
+            }
+        }
+        return null;
     }
 
 }
