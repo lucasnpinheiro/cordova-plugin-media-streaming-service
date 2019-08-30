@@ -13,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -47,7 +46,6 @@ import static com.paulkjoseph.mediastreaming.Constants.KEY_MEDIA_STREAMS;
 import static com.paulkjoseph.mediastreaming.Constants.KEY_NOTIFICATION_ID;
 import static com.paulkjoseph.mediastreaming.Constants.KEY_SELECTED_INDEX;
 import static com.paulkjoseph.mediastreaming.Constants.MEDIA_SESSION_TAG;
-import static com.paulkjoseph.mediastreaming.Constants.MSG_MEDIA_STREAM_FAILED;
 import static com.paulkjoseph.mediastreaming.Constants.PACKAGE_NAME;
 
 public class MediaStreamingService extends Service {
@@ -117,7 +115,6 @@ public class MediaStreamingService extends Service {
             public void onPlayerError(ExoPlaybackException error) {
                 final int currentWindowIndex = player.getCurrentWindowIndex();
                 Log.e(TAG, "onPlayerError[url]: " + mediaStreamRequest.getMediaStreams().get(player.getCurrentWindowIndex()).getUri(), error);
-                Toast.makeText(context, MSG_MEDIA_STREAM_FAILED, Toast.LENGTH_SHORT).show();
                 MediaStreamUtils.broadcastMessage(context, "PLAYBACK_ERROR", currentWindowIndex);
                 stopSelf();
             }
