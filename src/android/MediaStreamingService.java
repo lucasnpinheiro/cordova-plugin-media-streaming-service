@@ -133,7 +133,7 @@ public class MediaStreamingService extends Service {
         ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource();
         for (MediaStream mediaStream : mediaStreamRequest.getMediaStreams()) {
             MediaSource mediaSource = new ExtractorMediaSource.Factory(httpDataSourceFactory)
-                    .setLoadErrorHandlingPolicy(new CustomLoadErrorHandlingPolicy())
+                    .setLoadErrorHandlingPolicy(new CustomLoadErrorHandlingPolicy(context))
                     .createMediaSource(Uri.parse(mediaStream.getUri()));
             concatenatingMediaSource.addMediaSource(mediaSource);
         }

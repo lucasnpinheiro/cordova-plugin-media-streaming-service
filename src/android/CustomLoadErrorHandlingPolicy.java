@@ -1,5 +1,6 @@
 package com.paulkjoseph.mediastreaming;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.android.exoplayer2.C;
@@ -13,7 +14,9 @@ public final class CustomLoadErrorHandlingPolicy extends DefaultLoadErrorHandlin
 
     private final static String TAG = CustomLoadErrorHandlingPolicy.class.getName();
 
-    public CustomLoadErrorHandlingPolicy() {
+    private Context context;
+
+    public CustomLoadErrorHandlingPolicy(Context context) {
         super();
     }
 
@@ -35,6 +38,7 @@ public final class CustomLoadErrorHandlingPolicy extends DefaultLoadErrorHandlin
     @Override
     public long getRetryDelayMsFor(int dataType, long loadDurationMs, IOException exception, int errorCount) {
         Log.e(TAG, "getRetryDelayMsFor[dataType]: " + dataType + ", [loadDurationMs]: " + loadDurationMs + ", [errorCount]: " + errorCount, exception);
+        MediaStreamUtils.broadcastMessage(context, "PLAYBACK_RETRY", -1);
         return exception instanceof FileNotFoundException
                 ? C.TIME_UNSET
                 : super.getRetryDelayMsFor(
