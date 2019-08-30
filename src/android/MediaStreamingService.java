@@ -30,7 +30,11 @@ import com.google.android.exoplayer2.ui.PlayerNotificationManager;
 import com.google.android.exoplayer2.ui.PlayerNotificationManager.BitmapCallback;
 import com.google.android.exoplayer2.ui.PlayerNotificationManager.MediaDescriptionAdapter;
 import com.google.android.exoplayer2.ui.PlayerNotificationManager.NotificationListener;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DataSpec;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Util;
 
 import org.apache.cordova.CordovaActivity;
@@ -99,11 +103,36 @@ public class MediaStreamingService extends Service {
                 .build();
         player.setAudioAttributes(audioAttributes, true);
 
-        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(
-                context, Util.getUserAgent(context, mediaStreamRequest.getChannelName()));
+        DefaultHttpDataSourceFactory httpDataSourceFactory = new DefaultHttpDataSourceFactory(
+                Util.getUserAgent(context, mediaStreamRequest.getChannelName()),
+                new TransferListener() {
+                    @Override
+                    public void onTransferInitializing(DataSource source, DataSpec dataSpec, boolean isNetwork) {
+
+                    }
+
+                    @Override
+                    public void onTransferStart(DataSource source, DataSpec dataSpec, boolean isNetwork) {
+
+                    }
+
+                    @Override
+                    public void onBytesTransferred(DataSource source, DataSpec dataSpec, boolean isNetwork, int bytesTransferred) {
+
+                    }
+
+                    @Override
+                    public void onTransferEnd(DataSource source, DataSpec dataSpec, boolean isNetwork) {
+
+                    }
+                },
+                DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
+                DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
+                true
+        );
         ConcatenatingMediaSource concatenatingMediaSource = new ConcatenatingMediaSource();
         for (MediaStream mediaStream : mediaStreamRequest.getMediaStreams()) {
-            MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+            MediaSource mediaSource = new ExtractorMediaSource.Factory(httpDataSourceFactory)
                     .setLoadErrorHandlingPolicy(new CustomLoadErrorHandlingPolicy())
                     .createMediaSource(Uri.parse(mediaStream.getUri()));
             concatenatingMediaSource.addMediaSource(mediaSource);
