@@ -89,7 +89,6 @@ public class MediaStreamingService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "onStartCommand[intent]: " + intent + ", [flags]: " + flags + ", [startId]: " + startId);
         handleIntent(intent);
-        loadPlayer(intent);
         Log.i(TAG, "onStartCommand[START_STICKY]: " + START_STICKY);
         return START_STICKY;
     }
@@ -108,22 +107,22 @@ public class MediaStreamingService extends Service {
                 new TransferListener() {
                     @Override
                     public void onTransferInitializing(DataSource source, DataSpec dataSpec, boolean isNetwork) {
-
+                        Log.i(TAG, "onTransferInitializing: [source]: " + source + ", [dataSpec]: " + dataSpec + ", [isNetwork]: " + isNetwork);
                     }
 
                     @Override
                     public void onTransferStart(DataSource source, DataSpec dataSpec, boolean isNetwork) {
-
+                        Log.i(TAG, "onTransferStart: [source]: " + source + ", [dataSpec]: " + dataSpec + ", [isNetwork]: " + isNetwork);
                     }
 
                     @Override
                     public void onBytesTransferred(DataSource source, DataSpec dataSpec, boolean isNetwork, int bytesTransferred) {
-
+                        Log.i(TAG, "onBytesTransferred: [source]: " + source + ", [dataSpec]: " + dataSpec + ", [isNetwork]: " + isNetwork + ", [bytesTransferred]: " + bytesTransferred);
                     }
 
                     @Override
                     public void onTransferEnd(DataSource source, DataSpec dataSpec, boolean isNetwork) {
-
+                        Log.i(TAG, "onTransferEnd: [source]: " + source + ", [dataSpec]: " + dataSpec + ", [isNetwork]: " + isNetwork);
                     }
                 },
                 DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
@@ -233,62 +232,61 @@ public class MediaStreamingService extends Service {
         mediaSessionConnector.setPlayer(player, null);
     }
 
-    private void handleIntent(final Intent intent) {
-        Log.i(TAG, "handleIntent[intent]: " + intent);
+    private void parseIntent(final Intent intent) {
+        Log.i(TAG, "parseIntent[intent]: " + intent);
         if (intent != null) {
             try {
                 currentState = MediaPlayerState.valueOf(intent.getAction());
             } catch (Exception ex) {
-                Log.e(TAG, "handleIntent[currentState]: " + currentState, ex);
+                Log.e(TAG, "parseIntent[currentState]: " + currentState, ex);
                 currentState = MediaPlayerState.play;
             }
-            Log.i(TAG, "handleIntent[currentState]: " + currentState);
+            Log.i(TAG, "parseIntent[currentState]: " + currentState);
             final String channelId = intent.getStringExtra(KEY_CHANNEL_ID);
-            Log.i(TAG, "handleIntent[channelId]: " + channelId);
+            Log.i(TAG, "parseIntent[channelId]: " + channelId);
             final String channelName = intent.getStringExtra(KEY_CHANNEL_NAME);
-            Log.i(TAG, "handleIntent[channelName]: " + channelName);
+            Log.i(TAG, "parseIntent[channelName]: " + channelName);
             int notificationId = DEFAULT_NOTIFICATION_ID;
             try {
                 notificationId = Integer.getInteger(intent.getStringExtra(KEY_NOTIFICATION_ID)).intValue();
             } catch (Exception ex) {
             }
-            Log.i(TAG, "handleIntent[notificationId]: " + notificationId);
+            Log.i(TAG, "parseIntent[notificationId]: " + notificationId);
             List<MediaStream> mediaStreams = MediaStreamUtils.deserializeMediaStreams(intent.getStringExtra(KEY_MEDIA_STREAMS));
-            Log.i(TAG, "handleIntent[mediaStreams]: " + mediaStreams);
+            Log.i(TAG, "parseIntent[mediaStreams]: " + mediaStreams);
             int selectedIndex = DEFAULT_SELECTED_INDEX;
             try {
                 selectedIndex = Integer.valueOf(intent.getStringExtra(KEY_SELECTED_INDEX)).intValue();
             } catch (Exception ex) {
             }
-            Log.i(TAG, "handleIntent[selectedIndex]: " + selectedIndex);
+            Log.i(TAG, "parseIntent[selectedIndex]: " + selectedIndex);
             mediaStreamRequest = new MediaStreamRequest(channelId == null ? DEFAULT_CHANNEL_ID : channelId, channelName, notificationId, mediaStreams, selectedIndex);
         } else {
-            Log.w(TAG, "handleIntent[intent]: intent == nul");
+            Log.w(TAG, "parseIntent[intent]: intent == nul");
         }
     }
 
-    private void loadPlayer(final Intent intent) {
-        Log.i(TAG, "loadPlayer[currentState]: " + currentState + ", [mediaStreamRequest]: " + mediaStreamRequest);
-        if (player == null && intent != null) {
-            Log.i(TAG, "loadPlayer[player]: player == null");
-            if (mediaStreamRequest != null && mediaStreamRequest.getMediaStreams() != null && mediaStreamRequest.getMediaStreams().size() > 0) {
-                initPlayer(context);
-            }
-        } else if (intent != null) {
-            Log.i(TAG, "loadPlayer[player]: player != null");
-            switch (currentState) {
-                case pause:
-                    pause();
-                    break;
-                case stop:
-                    stop();
-                    break;
-                case close:
-                    close();
-                    break;
-                default:
-                    play(mediaStreamRequest.getSelectedIndex());
-            }
+    private void handleIntent(final Intent intent) {
+        Log.i(TAG, "handleIntent[currentState]: " + currentState + ", [mediaStreamRequest]: " + mediaStreamRequest);
+        switch (currentState) {
+            case pause:
+                pause();
+                break;
+            case stop:
+                stop();
+                break;
+            case close:
+                close();
+                break;
+            default:
+                parseIntent(intent);
+                if (mediaStreamRequest != null) {
+                    Log.i(TAG, "handleIntent[player]: player == null" + ", [mediaStreamRequest != null]: " + (mediaStreamRequest != null));
+                    if (mediaStreamRequest != null && mediaStreamRequest.getMediaStreams() != null && mediaStreamRequest.getMediaStreams().size() > 0) {
+                        initPlayer(context);
+                    }
+                }
+                play(mediaStreamRequest.getSelectedIndex());
         }
     }
 
@@ -301,17 +299,24 @@ public class MediaStreamingService extends Service {
 
     private void play() {
         Log.i(TAG, "play[player != null]: " + (player != null));
-        player.setPlayWhenReady(true);
+        if (player != null) {
+            player.setPlayWhenReady(true);
+        }
     }
 
     private void play(int windowIndex) {
+        Log.i(TAG, "play[player != null]: " + (player != null) + ", [windowIndex]: " + windowIndex);
         play();
-        player.seekTo(windowIndex, C.TIME_UNSET);
+        if (player != null) {
+            player.seekTo(windowIndex, C.TIME_UNSET);
+        }
     }
 
     private void stop() {
         Log.i(TAG, "stop[player != null]: " + (player != null));
-        player.stop();
+        if (player != null) {
+            player.stop();
+        }
     }
 
     private void close() {
