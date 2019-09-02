@@ -268,6 +268,10 @@ public class MediaStreamingService extends Service {
 
     private void handleIntent(final Intent intent) {
         Log.i(TAG, "handleIntent[currentState]: " + currentState + ", [mediaStreamRequest]: " + mediaStreamRequest);
+        parseIntent(intent);
+        if (canLoadPlayer(mediaStreamRequest)) {
+            initPlayer(context);
+        }
         switch (currentState) {
             case pause:
                 pause();
@@ -279,13 +283,6 @@ public class MediaStreamingService extends Service {
                 close();
                 break;
             default:
-                parseIntent(intent);
-                if (mediaStreamRequest != null) {
-                    Log.i(TAG, "handleIntent[player]: player == null" + ", [mediaStreamRequest != null]: " + (mediaStreamRequest != null));
-                    if (mediaStreamRequest != null && mediaStreamRequest.getMediaStreams() != null && mediaStreamRequest.getMediaStreams().size() > 0) {
-                        initPlayer(context);
-                    }
-                }
                 play(mediaStreamRequest.getSelectedIndex());
         }
     }
@@ -352,6 +349,12 @@ public class MediaStreamingService extends Service {
             Log.e(TAG, "getParentActivityIntent[packageName]: " + packageName, ex);
             return new Intent(context, CordovaActivity.class);
         }
+    }
+
+    private boolean canLoadPlayer(final MediaStreamRequest mediaStreamRequest) {
+        final boolean result = mediaStreamRequest != null && mediaStreamRequest.getMediaStreams() != null && mediaStreamRequest.getMediaStreams().size() > 0;
+        Log.i(TAG, "canLoadPlayer[result]: " + result);
+        return result;
     }
 
 }
