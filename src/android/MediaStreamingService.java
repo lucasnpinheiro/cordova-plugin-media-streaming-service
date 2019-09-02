@@ -104,27 +104,7 @@ public class MediaStreamingService extends Service {
 
         DefaultHttpDataSourceFactory httpDataSourceFactory = new DefaultHttpDataSourceFactory(
                 Util.getUserAgent(context, mediaStreamRequest.getChannelName()),
-                new TransferListener() {
-                    @Override
-                    public void onTransferInitializing(DataSource source, DataSpec dataSpec, boolean isNetwork) {
-                        Log.i(TAG, "onTransferInitializing: [source]: " + source + ", [dataSpec]: " + dataSpec + ", [isNetwork]: " + isNetwork);
-                    }
-
-                    @Override
-                    public void onTransferStart(DataSource source, DataSpec dataSpec, boolean isNetwork) {
-                        Log.i(TAG, "onTransferStart: [source]: " + source + ", [dataSpec]: " + dataSpec + ", [isNetwork]: " + isNetwork);
-                    }
-
-                    @Override
-                    public void onBytesTransferred(DataSource source, DataSpec dataSpec, boolean isNetwork, int bytesTransferred) {
-                        Log.i(TAG, "onBytesTransferred: [source]: " + source + ", [dataSpec]: " + dataSpec + ", [isNetwork]: " + isNetwork + ", [bytesTransferred]: " + bytesTransferred);
-                    }
-
-                    @Override
-                    public void onTransferEnd(DataSource source, DataSpec dataSpec, boolean isNetwork) {
-                        Log.i(TAG, "onTransferEnd: [source]: " + source + ", [dataSpec]: " + dataSpec + ", [isNetwork]: " + isNetwork);
-                    }
-                },
+                null,
                 DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
                 DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
                 true
@@ -141,9 +121,7 @@ public class MediaStreamingService extends Service {
         player.addListener(new Player.EventListener() {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
-                final int currentWindowIndex = player.getCurrentWindowIndex();
-                Log.e(TAG, "onPlayerError[url]: " + mediaStreamRequest.getMediaStreams().get(player.getCurrentWindowIndex()).getUri(), error);
-                MediaStreamUtils.broadcastMessage(context, "PLAYBACK_ERROR", currentWindowIndex);
+                MediaStreamUtils.broadcastMessage(context, "PLAYBACK_ERROR", -1);
                 stopSelf();
             }
 
