@@ -6,9 +6,9 @@
     <name>Cordova Media Streaming Service</name>
     <description>Media streaming service with ongoing notification.</description>
     <license>MIT</license>
-    <author>Paul Kibe Njuguna</author>
-    <repo>https://github.com/paulkjoseph/cordova-plugin-media-streaming-service</repo>
-	<issue>https://github.com/paulkjoseph/cordova-plugin-media-streaming-service/issues</issue>
+    <author>Lucas Nunes Pinto Pinheiro</author>
+    <repo>https://github.com/lucasnpinheiro/cordova-plugin-media-streaming-service</repo>
+	<issue>https://github.com/lucasnpinheiro/cordova-plugin-media-streaming-service/issues</issue>
     <keywords>cordova,background,foreground,service,media,audio,exoplayer</keywords>
 
     <engines>
