@@ -10,7 +10,7 @@
     },
     "repository": {
       "type": "git",
-      "url": "git+https://github.com/paulkjoseph/cordova-plugin-media-streaming-service"
+      "url": "git+https://github.com/lucasnpinheiro/cordova-plugin-media-streaming-service"
     },
     "keywords": [
       "ecosystem:cordova",
@@ -27,10 +27,10 @@
       "foreground",
       "service"
     ],
-    "author": "Paul Kibe Njuguna",
+    "author": "Lucas Nunes Pinto Pinheiro",
     "license": "MIT",
     "bugs": {
-      "url": "https://github.com/paulkjoseph/cordova-plugin-media-streaming-service/issues"
+      "url": "https://github.com/lucasnpinheiro/cordova-plugin-media-streaming-service/issues"
     },
-    "homepage": "https://github.com/paulkjoseph/cordova-plugin-media-streaming-service"
+    "homepage": "https://github.com/lucasnpinheiro/cordova-plugin-media-streaming-service"
   }
