@@ -24,7 +24,7 @@
 
         <config-file target="config.xml" parent="/*">
             <feature name="MediaStreamingPlugin">
-                <param name="android-package" value="com.paulkjoseph.mediastreaming.MediaStreamingPlugin" />
+                <param name="android-package" value="com.lucasnpinheiro.mediastreaming.MediaStreamingPlugin" />
             </feature>
         </config-file>
 
@@ -34,19 +34,19 @@
 		</config-file>
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <service android:name="com.paulkjoseph.mediastreaming.MediaStreamingService" android:stopWithTask="true" />
+            <service android:name="com.lucasnpinheiro.mediastreaming.MediaStreamingService" android:stopWithTask="true" />
         </config-file>
 
         <source-file src="src/res/drawable/media_streaming.png" target-dir="res/drawable/"/>
 
-        <source-file src="src/android/Constants.java" target-dir="src/com/paulkjoseph/mediastreaming" />
-        <source-file src="src/android/CustomLoadErrorHandlingPolicy.java" target-dir="src/com/paulkjoseph/mediastreaming" />
-        <source-file src="src/android/MediaPlayerState.java" target-dir="src/com/paulkjoseph/mediastreaming" />
-        <source-file src="src/android/MediaStream.java" target-dir="src/com/paulkjoseph/mediastreaming" />
-        <source-file src="src/android/MediaStreamRequest.java" target-dir="src/com/paulkjoseph/mediastreaming" />
-        <source-file src="src/android/MediaStreamUtils.java" target-dir="src/com/paulkjoseph/mediastreaming" />
-        <source-file src="src/android/MediaStreamingPlugin.java" target-dir="src/com/paulkjoseph/mediastreaming" />
-        <source-file src="src/android/MediaStreamingService.java" target-dir="src/com/paulkjoseph/mediastreaming" />
+        <source-file src="src/android/Constants.java" target-dir="src/com/lucasnpinheiro/mediastreaming" />
+        <source-file src="src/android/CustomLoadErrorHandlingPolicy.java" target-dir="src/com/lucasnpinheiro/mediastreaming" />
+        <source-file src="src/android/MediaPlayerState.java" target-dir="src/com/lucasnpinheiro/mediastreaming" />
+        <source-file src="src/android/MediaStream.java" target-dir="src/com/lucasnpinheiro/mediastreaming" />
+        <source-file src="src/android/MediaStreamRequest.java" target-dir="src/com/lucasnpinheiro/mediastreaming" />
+        <source-file src="src/android/MediaStreamUtils.java" target-dir="src/com/lucasnpinheiro/mediastreaming" />
+        <source-file src="src/android/MediaStreamingPlugin.java" target-dir="src/com/lucasnpinheiro/mediastreaming" />
+        <source-file src="src/android/MediaStreamingService.java" target-dir="src/com/lucasnpinheiro/mediastreaming" />
 
     </platform>
 

@@ -1,4 +1,4 @@
-package com.paulkjoseph.mediastreaming;
+package com.lucasnpinheiro.mediastreaming;
 
 public class MediaStream {
     private String uri;

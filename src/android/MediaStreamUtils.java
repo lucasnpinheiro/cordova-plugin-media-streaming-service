@@ -1,4 +1,4 @@
-package com.paulkjoseph.mediastreaming;
+package com.lucasnpinheiro.mediastreaming;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,8 +25,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static com.paulkjoseph.mediastreaming.Constants.KEY_CURRENT_WINDOW_INDEX;
-import static com.paulkjoseph.mediastreaming.Constants.KEY_DATA;
+import static com.lucasnpinheiro.mediastreaming.Constants.KEY_CURRENT_WINDOW_INDEX;
+import static com.lucasnpinheiro.mediastreaming.Constants.KEY_DATA;
 
 public final class MediaStreamUtils {
 

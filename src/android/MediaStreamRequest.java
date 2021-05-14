@@ -1,4 +1,4 @@
-package com.paulkjoseph.mediastreaming;
+package com.lucasnpinheiro.mediastreaming;
 
 import java.util.List;
 

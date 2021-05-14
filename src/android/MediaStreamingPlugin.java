@@ -1,4 +1,4 @@
-package com.paulkjoseph.mediastreaming;
+package com.lucasnpinheiro.mediastreaming;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,11 +11,11 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import static com.paulkjoseph.mediastreaming.Constants.KEY_CHANNEL_ID;
-import static com.paulkjoseph.mediastreaming.Constants.KEY_CHANNEL_NAME;
-import static com.paulkjoseph.mediastreaming.Constants.KEY_MEDIA_STREAMS;
-import static com.paulkjoseph.mediastreaming.Constants.KEY_NOTIFICATION_ID;
-import static com.paulkjoseph.mediastreaming.Constants.KEY_SELECTED_INDEX;
+import static com.lucasnpinheiro.mediastreaming.Constants.KEY_CHANNEL_ID;
+import static com.lucasnpinheiro.mediastreaming.Constants.KEY_CHANNEL_NAME;
+import static com.lucasnpinheiro.mediastreaming.Constants.KEY_MEDIA_STREAMS;
+import static com.lucasnpinheiro.mediastreaming.Constants.KEY_NOTIFICATION_ID;
+import static com.lucasnpinheiro.mediastreaming.Constants.KEY_SELECTED_INDEX;
 
 public class MediaStreamingPlugin extends CordovaPlugin {
 

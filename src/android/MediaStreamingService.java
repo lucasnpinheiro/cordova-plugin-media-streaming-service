@@ -1,4 +1,4 @@
-package com.paulkjoseph.mediastreaming;
+package com.lucasnpinheiro.mediastreaming;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -41,16 +41,16 @@ import org.apache.cordova.CordovaActivity;
 
 import java.util.List;
 
-import static com.paulkjoseph.mediastreaming.Constants.DEFAULT_CHANNEL_ID;
-import static com.paulkjoseph.mediastreaming.Constants.DEFAULT_NOTIFICATION_ID;
-import static com.paulkjoseph.mediastreaming.Constants.DEFAULT_SELECTED_INDEX;
-import static com.paulkjoseph.mediastreaming.Constants.KEY_CHANNEL_ID;
-import static com.paulkjoseph.mediastreaming.Constants.KEY_CHANNEL_NAME;
-import static com.paulkjoseph.mediastreaming.Constants.KEY_MEDIA_STREAMS;
-import static com.paulkjoseph.mediastreaming.Constants.KEY_NOTIFICATION_ID;
-import static com.paulkjoseph.mediastreaming.Constants.KEY_SELECTED_INDEX;
-import static com.paulkjoseph.mediastreaming.Constants.MEDIA_SESSION_TAG;
-import static com.paulkjoseph.mediastreaming.Constants.PACKAGE_NAME;
+import static com.lucasnpinheiro.mediastreaming.Constants.DEFAULT_CHANNEL_ID;
+import static com.lucasnpinheiro.mediastreaming.Constants.DEFAULT_NOTIFICATION_ID;
+import static com.lucasnpinheiro.mediastreaming.Constants.DEFAULT_SELECTED_INDEX;
+import static com.lucasnpinheiro.mediastreaming.Constants.KEY_CHANNEL_ID;
+import static com.lucasnpinheiro.mediastreaming.Constants.KEY_CHANNEL_NAME;
+import static com.lucasnpinheiro.mediastreaming.Constants.KEY_MEDIA_STREAMS;
+import static com.lucasnpinheiro.mediastreaming.Constants.KEY_NOTIFICATION_ID;
+import static com.lucasnpinheiro.mediastreaming.Constants.KEY_SELECTED_INDEX;
+import static com.lucasnpinheiro.mediastreaming.Constants.MEDIA_SESSION_TAG;
+import static com.lucasnpinheiro.mediastreaming.Constants.PACKAGE_NAME;
 
 public class MediaStreamingService extends Service {
 
